@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h3>User ID is {{ user.id }}</h3>
+    <h3>User login is {{ user.login }}</h3>
+    <h3>User password hash is {{ user.password_hash }}</h3>
+    <h3>User description is {{ user.description }}</h3>
+    <h3>User email is {{ user.email }}</h3>
+    <h3>User created at {{ user.created_at }}</h3>
+    <h3>User updated at {{ user.updated_at }}</h3>
+{% endblock %}
