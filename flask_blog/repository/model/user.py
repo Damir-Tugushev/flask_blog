@@ -4,7 +4,7 @@ from flask_login import UserMixin
 from sqlalchemy.dialects.postgresql import UUID
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from flask_blog.repository import db
+from .. import db
 
 
 class User(UserMixin, db.Model):

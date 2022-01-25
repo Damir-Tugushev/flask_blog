@@ -1,0 +1,12 @@
+{% macro render_post(post, show_author=false) %}
+    <div class="mt-2">
+        <h5>
+            {% if show_author %}
+                {% set author_login = post.author.login %}
+                <a class="fw-bold" href="{{ url_for('user', login=author_login) }}">{{ author_login }}</a>:
+            {% endif %}
+            {{ post.title }}
+        </h5>
+        <p>{{ post.text_content }}</p>
+    </div>
+{% endmacro %}

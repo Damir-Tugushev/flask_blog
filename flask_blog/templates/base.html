@@ -40,8 +40,21 @@
                             <li class="nav-item">
                                 <a class="nav-link active"
                                    aria-current="page"
-                                   href="{{ url_for('logout') }}">Log out</a>
+                                   href="{{ url_for('posts') }}">Posts</a>
                             </li>
+                            {% if user and user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link active"
+                                       aria-current="page"
+                                       href="{{ url_for('logout') }}">Log out</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link active"
+                                       aria-current="page"
+                                       href="{{ url_for('login') }}">Log in</a>
+                                </li>
+                            {% endif %}
                         </ul>
                     </div>
                 </div>
@@ -50,7 +63,7 @@
 
         <main class="flex-shrink-0">
             <div class="container">
-                {% block main %}
+                {% block main required %}
                 {% endblock %}
             </div>
         </main>

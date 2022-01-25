@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
+{% import 'macro/post.html' as post_macro %}
+
 {% block main %}
-    <h3>User ID is {{ user.id }}</h3>
     <h3>User login is {{ user.login }}</h3>
-    <h3>User password hash is {{ user.password_hash }}</h3>
     <h3>User description is {{ user.description }}</h3>
     <h3>User email is {{ user.email }}</h3>
     <h3>User created at {{ user.created_at }}</h3>
     <h3>User updated at {{ user.updated_at }}</h3>
+
+    <div class="mt-4">
+        <h4 class="mb-3">Posts</h4>
+        {% for post in posts %}
+            {{ post_macro.render_post(post) }}
+        {% else %}
+            <h5>No posts found</h5>
+        {% endfor %}
+    </div>
+
 {% endblock %}

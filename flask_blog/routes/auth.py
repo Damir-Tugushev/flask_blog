@@ -1,33 +1,23 @@
-from urllib.parse import urljoin, urlparse
-
 from flask import render_template, redirect, url_for, flash, request
 from flask_login import current_user, login_user, logout_user, login_required
 
-from . import app
-from .forms import LoginForm, RegisterForm
-from .repository import db
-from .repository.model import User, Session
+from .utils import is_safe_url
+from .. import app
+from ..forms import LoginForm, RegisterForm
+from ..repository import db
+from ..repository.model import User, Session
 
 
-def is_safe_url(target):
-    ref_url = urlparse(request.host_url)
-    test_url = urlparse(urljoin(request.host_url, target))
-    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
-
-
-@app.route('/')
-def index():
-    return render_template('main.html')
-
-
+# noinspection PyShadowingNames
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if current_user.is_authenticated:
+    user: User = current_user
+    if user.is_authenticated:
         return redirect(url_for('index'))
 
     form = LoginForm()
     if form.validate_on_submit():
-        user: User = User.query.filter_by(login=form.login.data).one_or_none()
+        user = User.query.filter_by(login=form.login.data).one_or_none()
         if user is None:
             flash("User with provided login name doesn't exist!")
             return redirect(url_for('login'))
@@ -47,24 +37,26 @@ def login():
             next_page = url_for('index')
         return redirect(next_page)
 
-    return render_template('login.html', title='Log in', form=form)
+    return render_template('login.html', title='Log in', user=user, form=form)
 
 
+# noinspection PyShadowingNames
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
+    user: User = current_user
+    if user.is_authenticated:
         return redirect(url_for('index'))
 
     form = RegisterForm()
     if form.validate_on_submit():
         # noinspection PyArgumentList
-        user: User = User(login=form.login.data)
+        user = User(login=form.login.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
         return redirect(url_for('login'))
 
-    return render_template('register.html', title='Register', form=form)
+    return render_template('register.html', title='Register', user=user, form=form)
 
 
 @app.route('/logout')
@@ -72,16 +64,3 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-# noinspection PyShadowingNames
-@app.route('/user/<login>')
-def user_def(login: str):
-    user: User = User.query.filter_by(login=login).first_or_404()
-    return render_template('user.html', title=f"Hello, {user.login}", user=user)
-
-
-# noinspection PyUnusedLocal
-@app.errorhandler(404)
-def error_404_not_found(error):
-    return render_template('404_not_found.html', title='404 Not Found'), 404
