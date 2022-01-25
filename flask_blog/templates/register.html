@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>Register</h1>
+    <form class="mt-4" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.login.label }}<br>
+            {{ form.login(size=25) }}
+            {% for error in form.login.errors %}
+                <span class="bg-danger">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=25) }}
+            {% for error in form.password.errors %}
+                <span class="bg-danger">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.repeat_password.label }}<br>
+            {{ form.repeat_password(size=25) }}
+            {% for error in form.repeat_password.errors %}
+                <span class="bg-danger">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p>Have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+{% endblock %}

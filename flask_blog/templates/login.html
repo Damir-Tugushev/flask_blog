@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>Log in</h1>
+    <form class="mt-4" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.login.label }}<br>
+            {{ form.login(size=25) }}
+            {% for error in form.login.errors %}
+                <span class="bg-danger">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.password.label }}<br>
+            {{ form.password(size=25) }}
+            {% for error in form.password.errors %}
+                <span class="bg-danger">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+        <p>{{ form.submit() }}</p>
+    </form>
+    <p>Don't have account? <a href="{{ url_for('register') }}">Register</a></p>
+{% endblock %}
