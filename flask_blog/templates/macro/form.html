@@ -1,0 +1,22 @@
+{% macro render_form_textfield(field) %}
+    <label for="{{ field.id }}" class="form-label">{{ field.label.text }}</label>
+    {{ field(class='form-control') }}
+    <div class="invalid-feedback"></div>
+{% endmacro %}
+
+{% macro render_form_sumbit(submit) %}
+    {{ submit(class='btn btn-primary') }}
+{% endmacro %}
+
+{% macro render_create_post_form(form) %}
+    <form id="add_post_form" class="container-fluid rounded border p-4 mb-4"
+          action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <h4>Create new post</h4>
+        <div class="mb-4">
+            {{ render_form_textfield(form.title) }}</div>
+        <div class="mb-4">
+            {{ render_form_textfield(form.text_content) }}</div>
+        {{ render_form_sumbit(form.submit) }}
+    </form>
+{% endmacro %}

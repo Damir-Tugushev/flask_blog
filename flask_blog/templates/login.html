@@ -1,25 +1,34 @@
 {% extends 'base.html' %}
 
+{% import 'macro/form.html' as form_macro %}
+
 {% block main %}
     <h1>Log in</h1>
-    <form class="mt-4" action="" method="post" novalidate>
+    <form class="mt-4" id="login_form"
+          action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.login.label }}<br>
-            {{ form.login(size=25) }}
-            {% for error in form.login.errors %}
-                <span class="bg-danger">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=25) }}
-            {% for error in form.password.errors %}
-                <span class="bg-danger">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
-        <p>{{ form.submit() }}</p>
+        <div class="mb-4">
+            {{ form_macro.render_form_textfield(form.login) }}</div>
+        <div class="mb-4">
+            {{ form_macro.render_form_textfield(form.password) }}</div>
+        <div class="mb-4 form-check">
+            {{ form.remember_me(class='form-check-input') }}
+            <label for="{{ form.remember_me.id }}" class="form-check-label">
+                {{ form.remember_me.label.text }}</label>
+        </div>
+        {{ form_macro.render_form_sumbit(form.submit) }}
     </form>
-    <p>Don't have account? <a href="{{ url_for('register') }}">Register</a></p>
+    <div class="mt-4">
+        Don't have account? <a href="{{ url_for('register') }}">Register</a>
+    </div>
+    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+    <script type="text/javascript">
+        const csrf_token = '{{ form.csrf_token }}';
+        const form = document.getElementById('login_form');
+
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            submit_auth_form('{{ url_for('login_form') }}', csrf_token, form);
+        });
+    </script>
 {% endblock %}

@@ -1,12 +1,51 @@
-{% macro render_post(post, show_author=false) %}
-    <div class="mt-2">
-        <h5>
-            {% if show_author %}
-                {% set author_login = post.author.login %}
-                <a class="fw-bold" href="{{ url_for('user', login=author_login) }}">{{ author_login }}</a>:
-            {% endif %}
-            {{ post.title }}
-        </h5>
-        <p>{{ post.text_content }}</p>
-    </div>
+{% macro render_post(post, current_user, button_tags=[], show_author=false, no_posts='No posts found') %}
+    <li class="list-group-item d-flex justify-content-between align-items-start" id="{{ post.id }}">
+        <div class="mt-2">
+            <h5 class="d-inline-block w-100" style="overflow-wrap: break-word;">
+                {% if show_author %}
+                    {% set author_login = post.author.login %}
+                    <a class="fw-bold" href="{{ url_for('user', login=author_login) }}">{{ author_login }}</a>:
+                {% endif %}
+                {{ post.title }}
+            </h5>
+            <span class="d-inline-block w-100" style="overflow-wrap: break-word;">{{ post.text_content }}</span>
+        </div>
+        {% if current_user.id == post.author.id %}
+            <div>
+                {% if 'soft_delete' in button_tags %}
+                    <button type="button" class="btn btn-sm btn-outline-danger"
+                            onclick="handle_post('{{ url_for('soft_delete_post') }}',
+                                    '{{ post.id }}', '{{ no_posts }}')">
+                        Delete
+                    </button>
+                {% endif %}
+                {% if 'delete' in button_tags %}
+                    <button type="button" class="btn btn-sm btn-danger"
+                            onclick="handle_post('{{ url_for('delete_post') }}',
+                                    '{{ post.id }}', '{{ no_posts }}')">
+                        Delete
+                    </button>
+                {% endif %}
+                {% if 'restore' in button_tags %}
+                    <button type="button" class="btn btn-sm btn-outline-primary"
+                            onclick="handle_post('{{ url_for('restore_soft_deleted_post') }}',
+                                    '{{ post.id }}', '{{ no_posts }}')">
+                        Restore
+                    </button>
+                {% endif %}
+            </div>
+        {% endif %}
+    </li>
+{% endmacro %}
+
+{% macro render_posts(posts, current_user, button_tags=[], show_author=false, no_posts='No posts found') %}
+    {% if posts is iterable and posts|length > 0 %}
+        <div class="list-group" id="post_list">
+            {% for post in posts %}
+                {{ render_post(post, current_user, button_tags, show_author, no_posts) }}
+            {% endfor %}
+        </div>
+    {% else %}
+        {{ no_posts }}
+    {% endif %}
 {% endmacro %}

@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 
+{% import 'macro/form.html' as form_macro %}
+
 {% block main %}
     <h1>Register</h1>
-    <form class="mt-4" action="" method="post" novalidate>
+    <form class="mt-4" id="register_form"
+          action="" method="post" novalidate>
         {{ form.hidden_tag() }}
-        <p>
-            {{ form.login.label }}<br>
-            {{ form.login(size=25) }}
-            {% for error in form.login.errors %}
-                <span class="bg-danger">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.password.label }}<br>
-            {{ form.password(size=25) }}
-            {% for error in form.password.errors %}
-                <span class="bg-danger">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>
-            {{ form.repeat_password.label }}<br>
-            {{ form.repeat_password(size=25) }}
-            {% for error in form.repeat_password.errors %}
-                <span class="bg-danger">[{{ error }}]</span>
-            {% endfor %}
-        </p>
-        <p>{{ form.submit() }}</p>
+        <div class="mb-4">
+            {{ form_macro.render_form_textfield(form.login) }}</div>
+        <div class="mb-4">
+            {{ form_macro.render_form_textfield(form.password) }}</div>
+        <div class="mb-4">
+            {{ form_macro.render_form_textfield(form.repeat_password) }}</div>
+        {{ form_macro.render_form_sumbit(form.submit) }}
     </form>
-    <p>Have an account? <a href="{{ url_for('login') }}">Log in</a></p>
+    <div class="mt-4">
+        Have an account? <a href="{{ url_for('login') }}">Log in</a>
+    </div>
+    <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+    <script type="text/javascript">
+        const csrf_token = '{{ form.csrf_token }}';
+        const form = document.getElementById('register_form');
+
+        form.addEventListener('submit', event => {
+            event.preventDefault();
+            submit_auth_form('{{ url_for('register_form') }}', csrf_token, form);
+        });
+    </script>
 {% endblock %}

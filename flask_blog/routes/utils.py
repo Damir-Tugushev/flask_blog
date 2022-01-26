@@ -13,3 +13,7 @@ def is_safe_url(target):
 
 def posts_not_deleted():
     return Post.query.join(DeletedPost, isouter=True).filter(DeletedPost.soft_deleted_at == None)
+
+
+def posts_deleted():
+    return Post.query.join(DeletedPost)

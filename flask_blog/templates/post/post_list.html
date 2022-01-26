@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% import 'macro/form.html' as form_macro %}
+{% import 'macro/post.html' as post_macro %}
+
+{% block main %}
+    <h3 class="mb-4">All posts</h3>
+    {% if current_user and current_user.is_authenticated %}
+        {{ form_macro.render_create_post_form(form) }}
+        <script src="{{ url_for('static', filename='js/form.js') }}"></script>
+        <script type="text/javascript">
+            const csrf_token = '{{ form.csrf_token }}';
+            const form = document.getElementById('post_form');
+
+            form.addEventListener('submit', event => {
+                event.preventDefault();
+                submit_create_post_form(
+                    '{{ url_for('post_form') }}',
+                    '{{ url_for('get_post', post_id='REPLACE') }}',
+                    '{{ url_for('get_user', user_id='REPLACE') }}',
+                    '{{ url_for('user', login='REPLACE') }}',
+                    csrf_token, form,
+                );
+            });
+        </script>
+    {% endif %}
+    {{ post_macro.render_posts(posts, current_user, show_author=true) }}
+{% endblock %}

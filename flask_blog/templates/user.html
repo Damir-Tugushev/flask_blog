@@ -11,11 +11,7 @@
 
     <div class="mt-4">
         <h4 class="mb-3">Posts</h4>
-        {% for post in posts %}
-            {{ post_macro.render_post(post) }}
-        {% else %}
-            <h5>No posts found</h5>
-        {% endfor %}
+        {{ post_macro.render_posts(posts, current_user, ['soft_delete']) }}
     </div>
-
+    <script src="{{ url_for('static', filename='js/post.js') }}"></script>
 {% endblock %}

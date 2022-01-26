@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% import 'macro/post.html' as post_macro %}
+
+{% block main %}
+    <h3 class="mb-4">Deleted posts</h3>
+    {{ post_macro.render_posts(deleted_posts, current_user, ['delete', 'restore']) }}
+    <script src="{{ url_for('static', filename='js/post.js') }}"></script>
+{% endblock %}

@@ -1,9 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired
+from wtforms.validators import DataRequired, Length
+from wtforms_html5 import AutoAttrMeta
 
 
 class PostForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    text_content = TextAreaField('Text of your post', validators=[DataRequired()])
-    submit = SubmitField('Post your thoughts')
+    class Meta(AutoAttrMeta):
+        pass
+
+    title = StringField('Title', validators=[DataRequired(), Length(max=100)])
+    text_content = TextAreaField('Text', validators=[DataRequired()])
+    submit = SubmitField('Add')
