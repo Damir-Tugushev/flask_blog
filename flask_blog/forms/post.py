@@ -10,4 +10,4 @@ class PostForm(FlaskForm):
 
     title = StringField('Title', validators=[DataRequired(), Length(max=100)])
     text_content = TextAreaField('Text', validators=[DataRequired()])
-    submit = SubmitField('Add')
+    submit = SubmitField('Submit')

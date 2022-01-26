@@ -3,15 +3,15 @@
 {% import 'macro/post.html' as post_macro %}
 
 {% block main %}
-    <h3>User login is {{ user.login }}</h3>
-    <h3>User description is {{ user.description }}</h3>
-    <h3>User email is {{ user.email }}</h3>
-    <h3>User created at {{ user.created_at }}</h3>
-    <h3>User updated at {{ user.updated_at }}</h3>
+    <div class="container">
+        <h3 class="mb-2">User information</h3>
+        <div>Login is '{{ user.login }}'</div>
+        <div>Profile was created at {{ user.created_at }}</div>
 
-    <div class="mt-4">
-        <h4 class="mb-3">Posts</h4>
-        {{ post_macro.render_posts(posts, current_user, ['soft_delete']) }}
+        <div class="mt-4">
+            <h3 class="mb-3">Posts</h3>
+            {{ post_macro.render_posts(posts, current_user, ['soft_delete']) }}
+        </div>
+        <script src="{{ url_for('static', filename='js/post.js') }}"></script>
     </div>
-    <script src="{{ url_for('static', filename='js/post.js') }}"></script>
 {% endblock %}
